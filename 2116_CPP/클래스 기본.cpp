@@ -5,6 +5,7 @@ using namespace std;
 
 // 여러 data들을 하나의 의미있는 구조체로 묶어서 관리
 // 구조체, 클래스는 단어의 첫 글자를 대문자로 함
+// class는 디폴트가 private (struct는 디폴트가 public)
 
 struct Student {
 	string name;
