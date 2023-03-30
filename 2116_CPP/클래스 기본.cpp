@@ -4,21 +4,30 @@
 using namespace std;
 
 // 여러 data들을 하나의 의미있는 구조체로 묶어서 관리
+// 구조체, 클래스는 단어의 첫 글자를 대문자로 함
 
-struct drink {
-	string subun; 
-	string chumga;
+struct Student {
+	string name;
+	string department;
+	// id를 string으로 하지않는 이유
+	// - 일반적으로 문자열은 정수데이터보다 많은 메모리 공간을 요구
+	// - 정수는 비교연산을 한번에 할 수 있으나, 문자열은 글자수만큼 반복해 비교해야함
+	int sex; // 가독성 & 유지보수를 위해 열거형(enum)으로 하는것을 추천, 0 : 남자 / 1 : 여자
+	int id; 
+	int age;
 };
 
 int  main() {
 
-	// (struct drink) 자료형 (C++에서는 drink만 써도 됨! 이건 C언어 스타일)
-	struct drink 딸기우유;
-	딸기우유.subun = "서울우유";
-	딸기우유.chumga = "킹스베리";
+	Student han;
+	han.name = "임한별";
+	han.sex = 1;
+	han.department = "뉴미디어 소프트웨어과";
+	han.id = 2116;
+	han.age = 18;
 
-	cout << "수분 : " << 딸기우유.subun << " / 첨가물 : " << 딸기우유.chumga << endl;
-
+	cout << "** 학생정보 **" << endl << "- " << han.name << endl << "- " << han.sex << endl
+		<< "- " << han.department << endl << "- " << han.id << endl << "- " << han.age << "세" << endl;
 
 	return 0;
 }
