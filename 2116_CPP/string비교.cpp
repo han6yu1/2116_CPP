@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-// C스타일, C++스타일
+
 using namespace std;
 
 int main(void) {
