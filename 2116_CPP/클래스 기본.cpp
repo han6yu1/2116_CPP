@@ -16,6 +16,12 @@ struct Student {
 	int sex; // 가독성 & 유지보수를 위해 열거형(enum)으로 하는것을 추천, 0 : 남자 / 1 : 여자
 	int id; 
 	int age;
+
+	// class는 멤버변수를 가질 수 있다
+	void print() {
+		cout << "** 학생정보 **" << endl << "- " << name << endl << "- " << sex << endl
+			<< "- " << department << endl << "- " << id << endl << "- " << age << "세" << endl;
+	}
 };
 
 int  main() {
@@ -27,8 +33,7 @@ int  main() {
 	han.id = 2116;
 	han.age = 18;
 
-	cout << "** 학생정보 **" << endl << "- " << han.name << endl << "- " << han.sex << endl
-		<< "- " << han.department << endl << "- " << han.id << endl << "- " << han.age << "세" << endl;
+	han.print();
 
 	return 0;
 }
