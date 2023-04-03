@@ -25,7 +25,7 @@ struct Student {
 };
 
 int  main() {
-
+	
 	Student han;
 	han.name = "ÀÓÇÑº°";
 	han.sex = 1;
