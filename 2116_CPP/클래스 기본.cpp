@@ -29,6 +29,14 @@ class Student {
 	int id; 
 	int age;
 	
+	Student(string _name, int _hakbun, int _age, int _sex, string _department) {
+		id = id;
+		name = _name;
+		age = _age;
+		sex = _sex;
+		department = _department;
+	}
+
 	// class는 멤버변수를 가질 수 있다
 	void print() {
 		cout << "** 학생정보 **" << endl << "- " << name << endl << "- " << sex << endl
@@ -39,7 +47,7 @@ class Student {
 int  main() {
 	
 	// Student stu1;
-	Student stu1 = Student(); // new 생략 가능
+	Student stu1 = Student("뉴진스", 2100, 18, 1, "뉴미디어 소프트웨어"); // new 생략 가능
 	stu1.print();
 
 	return 0;
