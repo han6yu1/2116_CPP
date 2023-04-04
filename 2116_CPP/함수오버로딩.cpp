@@ -1,7 +1,7 @@
 #include <iostream>
 
 using namespace std;
-// 함수 오버로딩을 해서 함수이름을 간결하겍 할 수 있다.
+// 함수 오버로딩을 해서 함수이름을 간결하게 할 수 있다.
 // 함수 오버로딩은 함수이름이 같다. 하지만 매개변수가 다르다 (중요)
 
 int sum_int(int a, int b) {
