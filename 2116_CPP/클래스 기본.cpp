@@ -74,5 +74,13 @@ int  main() {
 	cout << "이름 : " << ptr ->name << endl;
 	cout << "명대사 : " << (*ptr).dialog << endl;
 
+
+	// 정적할당
+	Student stu1 = Student("뉴진스", 2100, 18, 1, "뉴미디어소프트웨어");
+	
+	// 동적할당
+	Student* stu2 = new Student("비수얼", 3100, 31, 0, "방송연예과"); // 자바와 다르게 *를 씀
+	stu2->print();
+
 	return 0;
 }
