@@ -36,7 +36,12 @@ class Student {
 	int id; 
 	int age;
 	
-	Student(string name, int hakbun, int age, int sex, string department) {
+	// : 멤버변수 초기화를 하면 const멤버변수도 초기화 할 수 있다.
+	Student(string _name, int _id, int _age, int _sex, string _department) 
+		: name(_name), id(_id), age(_age), sex(_sex), department(_department)
+	{
+
+		
 
 		// this를 하는 이유
 		// this : 객체 자기자신을 가리키는 포인터
