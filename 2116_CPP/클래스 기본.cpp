@@ -36,12 +36,17 @@ class Student {
 	int id; 
 	int age;
 	
-	Student(string _name, int _hakbun, int _age, int _sex, string _department) {
-		id = id;
-		name = _name;
-		age = _age;
-		sex = _sex;
-		department = _department;
+	Student(string name, int hakbun, int age, int sex, string department) {
+
+		// this를 하는 이유
+		// this : 객체 자기자신을 가리키는 포인터
+		// 매개변수명과 멤버변수명이 같아도 구별이 가능하다. 장점!
+		this->id = id;
+		this->name = name;
+		this->age = age;
+		this->sex = sex;
+		this->department = department;
+
 	}
 
 	// class는 멤버변수를 가질 수 있다
@@ -61,7 +66,7 @@ int  main() {
 
 	// 역참조연산
 	// ptr -> name, (*ptr).name 같은 결과
-	cout << "이름 : " << (*ptr).name << endl;
+	cout << "이름 : " << ptr ->name << endl;
 	cout << "명대사 : " << (*ptr).dialog << endl;
 
 	return 0;
