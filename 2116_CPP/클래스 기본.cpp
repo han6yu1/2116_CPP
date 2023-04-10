@@ -75,12 +75,14 @@ int  main() {
 	cout << "명대사 : " << (*ptr).dialog << endl;
 
 
-	// 정적할당
+	// 정적할당 : 메모리의 크기가 컴파일 할 때 결정됨
 	Student stu1 = Student("뉴진스", 2100, 18, 1, "뉴미디어소프트웨어");
 	
-	// 동적할당
+	// 동적할당 : 메모리의 크기가 실행할 때 결정됨. heap영역
 	Student* stu2 = new Student("비수얼", 3100, 31, 0, "방송연예과"); // 자바와 다르게 *를 씀
 	stu2->print();
+
+	delete stu2;
 
 	return 0;
 }
