@@ -76,13 +76,19 @@ int  main() {
 
 
 	// 정적할당 : 메모리의 크기가 컴파일 할 때 결정됨
-	Student stu1 = Student("뉴진스", 2100, 18, 1, "뉴미디어소프트웨어");
+	//Student stu1 = Student("뉴진스", 2100, 18, 1, "뉴미디어소프트웨어");
+	Student stu3[2];
+	for (int i = 0; i < 2; i++) stu3[i].print();
 	
 	// 동적할당 : 메모리의 크기가 실행할 때 결정됨. heap영역
-	Student* stu2 = new Student("비수얼", 3100, 31, 0, "방송연예과"); // 자바와 다르게 *를 씀
-	stu2->print();
+	// c++의 동적할당은 반드시 delete로 해제해야 메모리 누수를 막을 수 있음
+	//Student* stu2 = new Student("비수얼", 3100, 31, 0, "방송연예과"); // 자바와 다르게 *를 씀
+	//stu2->print(); // 단일 객체는 멤버를 -> 로 접근
+	//delete stu2;
+	Student* stu4 = new Student[6];
+	for (int i = 0; i < 2; i++) stu4[i].print(); // 배열의 요소에 해당하는 객체는 멤버를 .으로 표현한다.
 
-	delete stu2;
+	delete[] stu4; // 배열 delete하기
 
 	return 0;
 }
