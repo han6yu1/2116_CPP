@@ -24,6 +24,11 @@ public:
         cout << "MString 소멸자 호출 완료" << endl;
 
     }
+    
+    // 복사생성자 (별도로 정의하지 않으면 컴파일러가 아래와 같은 복사생성자를 만들어 냄)
+    MString(const MString& rhs) : size_(rhs.size_), c_str_(rhs.c_str_) {
+        cout << "복사생성자 호출" << endl;
+    }
 private:
     int size_; // 문자열의 길이
     char* c_str_; // 문자열을 가리키는 주소, c_str_ 적는거 법칙
@@ -31,11 +36,14 @@ private:
 
 int main() 
 {
- 
+    // 일반적인 생성자 호출
     MString str1 = MString("Aitai");
-    cout << str1.c_str() << endl;
+
+    // 복사생성자 호출
+    MString str2 = str1;
 
 
+    
     return 0;
 }
 
