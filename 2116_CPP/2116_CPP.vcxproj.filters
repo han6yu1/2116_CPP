@@ -42,5 +42,8 @@
     <ClCompile Include="깊은복사, 얕은복사.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="복사생성자.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
