@@ -23,10 +23,16 @@ int main() {
 				window.close();
 		}
 
+		// else if를 하면 키 동시클릭이 안되니까 if를 해야함.
 		if (Keyboard::isKeyPressed(Keyboard::Up))
-			snake.move(0, -1); // 컴퓨터에선 y값이 위로 갈수록 감소임
+			snake.move(0, -5); // 컴퓨터에선 y값이 위로 갈수록 감소임
 		if (Keyboard::isKeyPressed(Keyboard::Down))
-			snake.move(0, 1);
+			snake.move(0, 5);
+		if (Keyboard::isKeyPressed(Keyboard::Right))
+			snake.move(5, 0); // x축은 실제와 같음
+		if (Keyboard::isKeyPressed(Keyboard::Left))
+			snake.move(-5, 0);
+
 		window.clear();
 		window.draw(snake);
 		window.display();
