@@ -14,7 +14,7 @@ public:
 		cout << "일반생성자 호출" << endl;
 	}
 
-	// 복사생성자(얕은 복사로 인하여 문제점이 발생)
+	// 복사생성자(얕은 복사로 인하여 문제점이 발생 => 깊은 복사로 고침)
 	Munja(const Munja& m) {
 		str_ = new char[strlen(m.str_) + 1];
 		strcpy(str_, m.str_); // str의 내용을 str_에 복사

@@ -1,56 +1,78 @@
-#include <iostream>
-#include <cstring>
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>	// cout, endl 사용
+#include <string.h>	// strcpy() 사용
 
 using namespace std;
 
-
-class Employee {
-
+class Student
+{
 private:
-	string name_;
-	int id_;
-	int age_;
-	double salary_;
+	int nHakbun;
+	char* sName;
 
 public:
-	void set_name(string name) { name_ = name; }
-	void set_id(int id) { id_ = id; }
-	void set_age(int age) { age_ = age; }
-	void set_salary(double salary) { salary_ = salary; }
+	// 생성자 : 객체가 생성되면 자동으로 호출되는 함수
+	// 반환형을 갖고있지 않는다
+	Student();
+	Student(int Hakbun, const char* Name);
+	Student(const Student& rhs);
+	~Student();
 
-	void PrintInfo() {
-		cout << "이름 : " << name_ << endl;
-		cout << "사번 : " << id_ << endl;
-		cout << "나이 : " << age_ << endl;
-		cout << "급여 : " << salary_ << endl;
-	}
+	void show();
+
 };
 
-int main() {
+Student::Student()
+{
+	nHakbun = 0;
+	sName = nullptr;
+}
 
-	Employee* a = new Employee();
-	a->set_name("임한별");
-	a->set_id(1111);
-	a->set_age(20);
-	a->set_salary(600000);
-	a->PrintInfo();
-	delete a;
+// 멤버변수를 초기화 할 수 있으며 따라서,
+// const형 변수와 참조형 변수를 멤버변수로 할 수 있다.
+Student::Student(int Hakbun, const char* Name)
+	: nHakbun(Hakbun)	// 멤버변수(매개변수)
+{
+	cout << "일반생성자 호출." << endl;
+	int len = strlen(Name) + 1;		// 공간의 갯수 파악
+	sName = new char[len];			// 갯수만큼 메모리 할당
+	strcpy(sName, Name);
+}
 
-	Employee* b = new Employee[2];
-	b[0].set_name("임은별");
-	b[0].set_id(2222);
-	b[0].set_age(22);
-	b[0].set_salary(800000);
+// 직접 작성 안해도 컴파일러가 알아서 만들어주는
+// 복사생성자
+Student::Student(const Student& rhs)
+	:nHakbun(rhs.nHakbun), sName(rhs.sName)
+{
+	int len = strlen(rhs.sName) + 1;
+	sName = new char[len];
+	strcpy(sName, rhs.sName);
 
-	b[1].set_name("임샛별");
-	b[1].set_id(3333);
-	b[1].set_age(26);
-	b[1].set_salary(1000);
+	cout << "복사 생성자 호출" << endl;
+}
 
-	for (int i = 0; i < 2; i++)
-		b[i].PrintInfo();
+Student::~Student()
+{
+	delete[] sName;
+	cout << "소멸자 호출" << endl;
+}
 
-	delete[] b;
+void Student::show()
+{
+	cout << "학번은 " << nHakbun << "입니다" << endl;
+	cout << "이름은 " << sName << "입니다" << endl << endl;
+}
+
+int main(void)
+{
+	// "일반생성자 호출" 출력
+	Student stu1 = Student(1111, "JWP");
+	// (1111, "JWP")가 복사됨. 일반생성자 호출X
+	Student stu2 = stu1;
+
+	stu1.show();
+	stu2.show();
 
 	return 0;
 }
+
