@@ -27,6 +27,8 @@ int main() {
 				window.close();
 		}
 
+		// 게임의 3가지 요소
+		// 1. input
 		// else if를 하면 키 동시클릭이 안됨.
 		if (Keyboard::isKeyPressed(Keyboard::Up))
 			snake.move(0, -5); // 컴퓨터에선 y값이 위로 갈수록 감소임
@@ -36,7 +38,17 @@ int main() {
 			snake.move(5, 0); // x축은 실제와 같음
 		else if (Keyboard::isKeyPressed(Keyboard::Left))
 			snake.move(-5, 0);
+		
+		// 2. update : 실시간으로 바뀌는 상태를 갱신해주는 것
+		// 보통 input, update 묶어서 update라고 함
 
+		// 뱀이 사과를 먹으면 - 즉 겹치면, 충돌하면 (intersects : 교집합)
+		if (snake.getGlobalBounds().intersects(apple.getGlobalBounds())) {
+			apple.setPosition(-500, -500);
+		}
+		
+		
+		// 3. render : update된 상태를 그려주는 것
 		window.clear();
 
 		window.draw(snake);
