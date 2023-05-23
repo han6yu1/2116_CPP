@@ -14,6 +14,10 @@ int main() {
 	snake.setSize(Vector2f(30, 30));
 	snake.setFillColor(Color::Green);
 
+	RectangleShape apple;
+	apple.setPosition(300, 400);
+	apple.setSize(Vector2f(30, 30));
+	apple.setFillColor(Color::Red);
 
 	while (window.isOpen()) { // window창 계속 유지
 		Event e;
@@ -34,7 +38,10 @@ int main() {
 			snake.move(-5, 0);
 
 		window.clear();
+
 		window.draw(snake);
+		window.draw(apple); // 뱀과 사과가 겹칠 경우 사과가 위에 나옴(순서 때문에)
+
 		window.display();
 	}
 
