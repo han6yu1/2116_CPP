@@ -2,13 +2,17 @@
 #include <stdlib.h> // srand(), rand() 쓰기 위함
 #include <time.h> // time() 쓰기 위함
 
+#define DIR_UP 0
+#define DIR_DOWN 1
+#define DIR_RIGHT 2
+#define DIR_LEFT 3
+ 
 int main() {
 	
 	using namespace sf;
 
 	const int WIDTH = 1000;
 	const int HEIGHT = 800;
-
 	int block = 40; // 한 칸을 40으로
 	const int w = WIDTH / block;
 	const int h = HEIGHT / block;
@@ -16,11 +20,12 @@ int main() {
 	RenderWindow window(VideoMode(640, 480), "Snake Game");
 	// 1초에 60번의 작업이 이루어 지도록 frame 조절
 	// 컴퓨터 사양이 달라도 똑같은 속도로 처리함
-	window.setFramerateLimit(30);
+	window.setFramerateLimit(15);
 
 	srand(time(NULL));
 	
 	RectangleShape snake;
+	int snake_dir = DIR_DOWN;
 	int snake_x = 3;
 	int snake_y = 3;
 	snake.setPosition(snake_x * block, snake_y * block);
@@ -46,25 +51,35 @@ int main() {
 		// 1. input
 		// else if를 하면 키 동시클릭이 안됨.
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
-			snake_y--;
-			snake.move(0, -block);
+			snake_dir = DIR_UP;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Down)) {
-			snake_y++;
-			snake.move(0, block);
+			snake_dir = DIR_DOWN;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			snake_x++;
-			snake.move(block, 0);
+			snake_dir = DIR_RIGHT;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			snake_x--;
-			snake.move(-block, 0);
+			snake_dir = DIR_LEFT;
 		}
 		
 		
 		// 2. update : 실시간으로 바뀌는 상태를 갱신해주는 것
 		// 보통 input, update 묶어서 update라고 함
+		if (snake_dir == DIR_UP) {
+			snake_y--;
+		}
+		else if (snake_dir == DIR_DOWN) {
+			snake_y++;
+		}
+		else if (snake_dir == DIR_RIGHT) {
+			snake_x++;
+		}
+		else if (snake_dir == DIR_LEFT) {
+			snake_x--;
+		}
+		snake.setPosition(snake_x * block, snake_y * block);
+
 
 		// 뱀이 사과를 먹으면 - 즉 겹치면, 충돌하면 (intersects : 교집합)
 		if (snake.getGlobalBounds().intersects(apple.getGlobalBounds())) {
