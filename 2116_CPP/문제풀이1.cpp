@@ -7,9 +7,12 @@ public:
 		for(int i = 0; i < size; i++)
 			arr_[i] = arr[i];
 	}
-		// 얕은복사 생성자
-	IntArray(const IntArray& rhs) 
-		: size_(rhs.size_), arr_(rhs.arr_){
+		// 깊은 복사 생성자
+	IntArray(const IntArray& rhs) {
+		arr_ = new int[rhs.size_];
+		size_ = rhs.size_;
+		for (int i = 0; i < rhs.size_; i++)
+			arr_[i] = rhs.arr_[i];
 	}
 
 private:
@@ -20,7 +23,7 @@ private:
 int main(void) {
 	int arr[] = { 1, 2, 3 };
 	IntArray ia = IntArray(arr, sizeof(arr)/sizeof(*arr));
-	IntArray ca = ia;
+	IntArray ca = ia; // 복사생성자
 
 	return 0;
 }
