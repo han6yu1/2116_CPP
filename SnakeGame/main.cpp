@@ -20,7 +20,7 @@ int main() {
 	RenderWindow window(VideoMode(640, 480), "Snake Game");
 	// 1초에 60번의 작업이 이루어 지도록 frame 조절
 	// 컴퓨터 사양이 달라도 똑같은 속도로 처리함
-	window.setFramerateLimit(15);
+	window.setFramerateLimit(10);
 
 	srand(time(NULL));
 	
@@ -82,7 +82,7 @@ int main() {
 
 
 		// 뱀이 사과를 먹으면 - 즉 겹치면, 충돌하면 (intersects : 교집합)
-		if (snake.getGlobalBounds().intersects(apple.getGlobalBounds())) {
+		if (snake_x == apple_x && snake_y == apple_y) {
 			apple_x = rand() % w;
 			apple_y = rand() % h;
 			apple.setPosition(apple_x * block, apple_y * block);
