@@ -78,21 +78,36 @@ int main() {
 			snake.dir_ = DIR_LEFT;
 		}
 		
-		
 		// 2. update : 실시간으로 바뀌는 상태를 갱신해주는 것
 		// 보통 input, update 묶어서 update라고 함
-		if (snake.dir_ == DIR_UP) {
-			snake.y_--;
+
+		// 경계범위를 넘어섰을 때
+		if (snake.x_ >= 0 && snake.x_ < w || snake.y_ >= 0 || snake.y_ < h) {
+			// 뱀이 이동하는 코드
+			if (snake.dir_ == DIR_UP) {
+				snake.y_--;
+			}
+			else if (snake.dir_ == DIR_DOWN) {
+				snake.y_++;
+			}
+			else if (snake.dir_ == DIR_RIGHT) {
+				snake.x_++;
+			}
+			else if (snake.dir_ == DIR_LEFT) {
+				snake.x_--;
+			}
 		}
-		else if (snake.dir_ == DIR_DOWN) {
-			snake.y_++;
-		}
-		else if (snake.dir_ == DIR_RIGHT) {
-			snake.x_++;
-		}
-		else if (snake.dir_ == DIR_LEFT) {
-			snake.x_--;
-		}
+
+		// 바운더리를 넘었을 때
+		if (snake.x_ < 0)
+			snake.x_ = 0;
+		if (snake.x_ >= w)
+			snake.x_ = w - 1;
+		if (snake.y_ < 0)
+			snake.y_ = 0;
+		if (snake.y_ >= h)
+			snake.y_ = h - 1;
+
 		snake.sprite_.setPosition(snake.x_ * block, snake.y_ * block);
 
 
