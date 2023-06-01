@@ -1,5 +1,5 @@
 ﻿#include <SFML/Graphics.hpp>
-#include <stdlib.h>	
+#include <stdlib.h>		// srand(), rand()
 #include <time.h>		// time()
 #include <stdio.h>
 using namespace sf;
@@ -20,7 +20,6 @@ public:
 	int length_;
 	Object body_[BODY_MAX];
 };
-
 class Apple {
 public:
 	int x_;
@@ -41,7 +40,6 @@ int main(void)
 	// 컴퓨터 사양이 달라도 똑같은 속도로 처리함
 	window.setFramerateLimit(20);
 	srand(time(NULL));
-
 	Snake snake;
 	snake.dir_ = DIR_DOWN;
 	snake.length_ = 1;
@@ -60,7 +58,7 @@ int main(void)
 	apple.sprite_.setPosition(apple.x_ * block, apple.y_ * block);
 	apple.sprite_.setSize(Vector2f(block, block));
 	apple.sprite_.setFillColor(Color::Red);
-	while (window.isOpen())
+	while (window.isOpen()) // window창 계속 유지
 	{
 		Event e;
 		while (window.pollEvent(e))
@@ -69,7 +67,8 @@ int main(void)
 			if (e.type == Event::Closed)
 				window.close();
 		}
-		// input
+		// 게임의 세 가지 구조
+		// 1. input
 		// 네 개의 방향키가 중복으로 input되면 안됨
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
 			snake.dir_ = DIR_UP;
@@ -84,10 +83,24 @@ int main(void)
 		else if (Keyboard::isKeyPressed(Keyboard::Left)) {
 			snake.dir_ = DIR_LEFT;
 		}
+		// 2. update : 실시간으로 바뀌는 상태를 갱신해주는 것
+		// 뱀이 사과를 먹으면 길이가 늘어짐
+		if (snake.body_[0].x_ == apple.x_ && snake.body_[0].y_ == apple.y_)
+		{
+			apple.x_ = rand() % w;
+			apple.y_ = rand() % h;
+			apple.sprite_.setPosition(apple.x_ * block, apple.y_ * block);
+			snake.length_++;
+			if (snake.length_ < BODY_MAX)
+				snake.length_++;
+		}
 
-		// update
-
-
+		// 몸통에 대한 이동
+		for (int i = snake.length_ - 1; i > 0; i--) {
+			snake.body_[i].x_ = snake.body_[i - 1].x_;
+			snake.body_[i].y_ = snake.body_[i - 1].y_;
+		}
+		// 머리에 대한 이동
 		if (snake.dir_ == DIR_UP) {
 			snake.body_[0].y_--;
 		}
@@ -100,15 +113,6 @@ int main(void)
 		else if (snake.dir_ == DIR_LEFT) {
 			snake.body_[0].x_--;
 		}
-
-		// 몸통에 대한 이동
-		for (int i = snake.length_ - 1; i > 0; i--) {
-			snake.body_[i].x_ = snake.body_[i - 1].x_;
-			snake.body_[i].y_ = snake.body_[i - 1].y_;
-			snake.body_[i].sprite_.setPosition(snake.body_[i].x_ * block, snake.body_[i].y_ * block);
-		}
-
-
 		// 바운더리를 넘었을 때 더이상 벗어나지 않도록
 		if (snake.body_[0].x_ < 0)
 			snake.body_[0].x_ = 0;
@@ -118,23 +122,11 @@ int main(void)
 			snake.body_[0].y_ = 0;
 		if (snake.body_[0].y_ >= h)
 			snake.body_[0].y_ = h - 1;
-		for (int i = 0; i < BODY_MAX; i++) {
+
+		for (int i = 0; i < snake.length_; i++) {
 			snake.body_[i].sprite_.setPosition(snake.body_[i].x_ * block, snake.body_[i].y_ * block);
 		}
-
-
-		// 뱀이 사과를 먹으면
-		// 뱀이 사과를 먹으면 길이가 늘어짐
-		// TODO : 길이가 1일 때 두 번 먹어야 늘어나는 버그 고치기
-		if (snake.body_[0].x_ == apple.x_ && snake.body_[0].y_ == apple.y_)
-		{
-			apple.x_ = rand() % w;
-			apple.y_ = rand() % h;
-			apple.sprite_.setPosition(apple.x_ * block, apple.y_ * block);
-			snake.length_++;
-		}
-
-		// render
+		// 3. render : update된 상태를 그려주는 것
 		window.clear();
 		for (int i = 0; i < BODY_MAX; i++) {
 			window.draw(snake.body_[i].sprite_);
