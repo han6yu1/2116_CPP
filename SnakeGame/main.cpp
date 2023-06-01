@@ -1,20 +1,24 @@
 ﻿#include <SFML/Graphics.hpp>
-#include <stdlib.h> // srand(), rand() 쓰기 위함
-#include <time.h> // time() 쓰기 위함
-
-#define DIR_UP 0
-#define DIR_DOWN 1
-#define DIR_RIGHT 2
-#define DIR_LEFT 3
-
+#include <stdlib.h>	
+#include <time.h>		// time()
+#include <stdio.h>
 using namespace sf;
-
+#define DIR_UP			0
+#define DIR_DOWN		1
+#define DIR_LEFT		2
+#define DIR_RIGHT		3
+#define BODY_MAX		20		// 뱀 몸통의 최대길이
+class Object {
+public:
+	int x_;
+	int y_;
+	RectangleShape sprite_;		// 그래픽
+};
 class Snake {
 public:
 	int dir_;
-	int x_;
-	int y_;
-	RectangleShape sprite_; // 그래픽
+	int length_;
+	Object body_[BODY_MAX];
 };
 
 class Apple {
@@ -23,48 +27,50 @@ public:
 	int y_;
 	RectangleShape sprite_;
 };
-
-int main() {
-
+int main(void)
+{
 	const int WIDTH = 1000;
 	const int HEIGHT = 800;
+
 	int block = 40; // 한 칸을 40으로
 	const int w = WIDTH / block;
 	const int h = HEIGHT / block;
 
-	RenderWindow window(VideoMode(640, 480), "Snake Game");
+	RenderWindow window(VideoMode(WIDTH, HEIGHT), "Snake Game");
 	// 1초에 60번의 작업이 이루어 지도록 frame 조절
 	// 컴퓨터 사양이 달라도 똑같은 속도로 처리함
-	window.setFramerateLimit(10);
-
+	window.setFramerateLimit(20);
 	srand(time(NULL));
-	
+
 	Snake snake;
 	snake.dir_ = DIR_DOWN;
-	snake.x_ = 3;
-	snake.y_ = 3;
-	snake.sprite_.setPosition(snake.x_ * block, snake.y_ * block);
-	snake.sprite_.setSize(Vector2f(block, block));
-	snake.sprite_.setFillColor(Color::Green);
-
+	snake.length_ = 1;
+	for (int i = 0; i < BODY_MAX; i++) {
+		snake.body_[i].x_ = -100;
+		snake.body_[i].y_ = -100;
+		snake.body_[i].sprite_.setPosition(snake.body_[i].x_ * block, snake.body_[i].y_ * block);
+		snake.body_[i].sprite_.setSize(Vector2f(block, block));
+		snake.body_[i].sprite_.setFillColor(Color::Green);
+	}
+	snake.body_[0].x_ = 3;
+	snake.body_[0].y_ = 3;
 	Apple apple;
 	apple.x_ = rand() % w;
 	apple.y_ = rand() % h;
 	apple.sprite_.setPosition(apple.x_ * block, apple.y_ * block);
 	apple.sprite_.setSize(Vector2f(block, block));
 	apple.sprite_.setFillColor(Color::Red);
-
-	while (window.isOpen()) { // window창 계속 유지
+	while (window.isOpen())
+	{
 		Event e;
-		while (window.pollEvent(e)) {
+		while (window.pollEvent(e))
+		{
 			// 윈도우의 x를 눌렀을 때 창이 닫아지도록
 			if (e.type == Event::Closed)
 				window.close();
 		}
-
-		// 게임의 3가지 요소
-		// 1. input
-		// else if를 하면 키 동시클릭이 안됨.
+		// input
+		// 네 개의 방향키가 중복으로 input되면 안됨
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
 			snake.dir_ = DIR_UP;
 		}
@@ -74,60 +80,68 @@ int main() {
 		else if (Keyboard::isKeyPressed(Keyboard::Right)) {
 			snake.dir_ = DIR_RIGHT;
 		}
+
 		else if (Keyboard::isKeyPressed(Keyboard::Left)) {
 			snake.dir_ = DIR_LEFT;
 		}
-		
-		// 2. update : 실시간으로 바뀌는 상태를 갱신해주는 것
-		// 보통 input, update 묶어서 update라고 함
 
-		// 경계범위를 넘어섰을 때
-		if (snake.x_ >= 0 && snake.x_ < w || snake.y_ >= 0 || snake.y_ < h) {
-			// 뱀이 이동하는 코드
-			if (snake.dir_ == DIR_UP) {
-				snake.y_--;
-			}
-			else if (snake.dir_ == DIR_DOWN) {
-				snake.y_++;
-			}
-			else if (snake.dir_ == DIR_RIGHT) {
-				snake.x_++;
-			}
-			else if (snake.dir_ == DIR_LEFT) {
-				snake.x_--;
-			}
+		// update
+
+
+		if (snake.dir_ == DIR_UP) {
+			snake.body_[0].y_--;
+		}
+		else if (snake.dir_ == DIR_DOWN) {
+			snake.body_[0].y_++;
+		}
+		else if (snake.dir_ == DIR_RIGHT) {
+			snake.body_[0].x_++;
+		}
+		else if (snake.dir_ == DIR_LEFT) {
+			snake.body_[0].x_--;
 		}
 
-		// 바운더리를 넘었을 때
-		if (snake.x_ < 0)
-			snake.x_ = 0;
-		if (snake.x_ >= w)
-			snake.x_ = w - 1;
-		if (snake.y_ < 0)
-			snake.y_ = 0;
-		if (snake.y_ >= h)
-			snake.y_ = h - 1;
-
-		snake.sprite_.setPosition(snake.x_ * block, snake.y_ * block);
+		// 몸통에 대한 이동
+		for (int i = snake.length_ - 1; i > 0; i--) {
+			snake.body_[i].x_ = snake.body_[i - 1].x_;
+			snake.body_[i].y_ = snake.body_[i - 1].y_;
+			snake.body_[i].sprite_.setPosition(snake.body_[i].x_ * block, snake.body_[i].y_ * block);
+		}
 
 
-		// 뱀이 사과를 먹으면 - 즉 겹치면, 충돌하면 (intersects : 교집합)
-		if (snake.x_ == apple.x_ && snake.y_ == apple.y_) {
+		// 바운더리를 넘었을 때 더이상 벗어나지 않도록
+		if (snake.body_[0].x_ < 0)
+			snake.body_[0].x_ = 0;
+		if (snake.body_[0].x_ >= w)
+			snake.body_[0].x_ = w - 1;
+		if (snake.body_[0].y_ < 0)
+			snake.body_[0].y_ = 0;
+		if (snake.body_[0].y_ >= h)
+			snake.body_[0].y_ = h - 1;
+		for (int i = 0; i < BODY_MAX; i++) {
+			snake.body_[i].sprite_.setPosition(snake.body_[i].x_ * block, snake.body_[i].y_ * block);
+		}
+
+
+		// 뱀이 사과를 먹으면
+		// 뱀이 사과를 먹으면 길이가 늘어짐
+		// TODO : 길이가 1일 때 두 번 먹어야 늘어나는 버그 고치기
+		if (snake.body_[0].x_ == apple.x_ && snake.body_[0].y_ == apple.y_)
+		{
 			apple.x_ = rand() % w;
 			apple.y_ = rand() % h;
 			apple.sprite_.setPosition(apple.x_ * block, apple.y_ * block);
+			snake.length_++;
 		}
-		
-		
-		// 3. render : update된 상태를 그려주는 것
+
+		// render
 		window.clear();
+		for (int i = 0; i < BODY_MAX; i++) {
+			window.draw(snake.body_[i].sprite_);
+		}
 
-		window.draw(snake.sprite_);
-		window.draw(apple.sprite_); // 뱀과 사과가 겹칠 경우 사과가 위에 나옴(순서 때문에)
-
+		window.draw(apple.sprite_);	// 뱀과 사과가 겹칠경우 사과가 위에 나옴
 		window.display();
 	}
-
-
 	return 0;
 }
