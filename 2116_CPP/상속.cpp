@@ -17,6 +17,10 @@ public:
 	void Eat() { cout << "Animal 먹다" << endl; }
 	void Sleep() { cout << "Animal 자다" << endl; }
 
+	void Roar(void) {
+		cout << "Roar" << endl;
+	}
+
 private:
 	int color_;
 	int age_;
@@ -42,8 +46,10 @@ private:
 
 int main(void) {
 
-	Rabbit* rabbit = new Rabbit(COLOR_RED, 3, 20); // 부모의 생성자도 호출
-	rabbit->Bite(); // 부모의 멤버함수 호출
+	Animal* animal = new Animal(COLOR_BLUE, 30);
+	animal->Roar(); // 동물 짖어
+	Rabbit* rabbit = new Rabbit(COLOR_RED, 3, 20); 
+	animal->Roar();
 
 	delete rabbit;
 	// rabbit을 생성하기 위해서 Animal이 같이 호출된다.
