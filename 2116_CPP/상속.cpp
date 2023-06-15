@@ -11,21 +11,6 @@ public:
 	Animal(int color, int age) : color_(color), age_(age)
 	{ 
 		cout << "Animal 생성자()" << endl; 
-		cout << age_ << "살" << endl;
-		switch (color_) {
-		case COLOR_RED:
-			cout << "빨간색" << endl;
-			break;
-		case COLOR_GREEN:
-			cout << "초록색" << endl;
-			break;
-		case COLOR_BLUE:
-			cout << "파란색" << endl;
-			break;
-		default:
-			cout << "이상한 색" << endl;
-			break;
-		}
 	} 
 	~Animal() { cout << "Animal 소멸자()" << endl; }
 	void Bite() { cout << "Animal 물다" << endl; }
@@ -43,10 +28,14 @@ public :
 	Rabbit(int color, int age, int ear_length) : Animal(color, age), ear_length_(ear_length_)
 	{
 		cout << "Rabbit 생성자()" << endl; 
-		cout << "귀 길이" << ear_length_ << endl;
 	}
 	~Rabbit() { cout << "Rabbit 소멸자()" << endl; }
 
+	// 함수 ovveride
+	// 다형성(polymorphism) : 같은 함수 시그니처(반환형, 이름 매개변수가 모두 같은)가 다르게 실행되는 것
+	void Roar(void) {
+		cout << "깡총깡총" << endl;
+	}
 private:
 	int ear_length_;
 };
