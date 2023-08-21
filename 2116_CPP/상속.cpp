@@ -1,60 +1,55 @@
-#include <iostream>
-using namespace std;
+#include <SFML/Graphics.hpp>
 
-#define COLOR_RED		0
-#define COLOR_GREEN		1
-#define COLOR_BLUE		2
+using namespace sf;
 
-
-class Animal {
+class Entity {
 public:
-	Animal(int color, int age) : color_(color), age_(age)
+	// 거의 99.99%이상 클래스를 매개변수로 할 때는 주소값으로 받자
+	// 메모리 용량 및 call by value 이슈 때문에
+	Entity(int life, RectangleShape* sprite)
+		: life_(life), sprite_(sprite)
 	{
-		cout << "Animal 생성자()" << endl;
 	}
-	virtual ~Animal() { cout << "Animal 소멸자()" << endl; }
-	// 순수 가상함수 : Java처럼 동적바인딩 + 추상메서드처럼 함수를 정의하지 않음 -> 상속받은 자식에서 정의
-	virtual void Roar(void) = 0;
-	virtual void Eat(void) = 0;
-	virtual void Sleep(void) = 0;
+
+	~Entity() {}
+
+	// getter
+	int get_life() { return life_; }
+	RectangleShape get_sprite() { return *sprite_; }
+
+	// setter
+	void set_life(int val) { life_ = val; }
+	void set_sprite(RectangleShape* val) { sprite_ = val; }
 
 private:
-	int color_;
-	int age_;
-};
-
-class Rabbit : public Animal {
-public:
-	// 부모생성자(Animal(color, age))가 먼저 호출
-	Rabbit(int color, int age, int ear_length) : Animal(color, age), ear_length_(ear_length)
-	{
-		cout << "Rabbit 생성자()" << endl;
-	}
-	virtual ~Rabbit() { cout << "Rabbit 소멸자()" << endl; }
-
-	// 함수 override
-	// 다형성(polymorphism) : 시그니쳐(반환형, 이름, 매개변수가 모두 같은)가 같은 함수임에도 
-	// 불구하고 다르게 실행되는 것
-	// override : 부모 함수 시그니쳐가 존재하지 않으면 에러발생(실수방지)
-	void Roar(void) override
-	{
-		cout << "깡총깡총" << endl;
-	}
-
-	// 순수가상함수(추상메서드)는 자식 클래스에서 무조건 정의해야 한다
-	void Eat(void) override {}
-	void Sleep(void) override {}
-
-private:
-	int ear_length_;
+	int life_;
+	RectangleShape* sprite_;
 };
 
 int main(void)
 {
-	// 추상클래스(순수가상함수가 하나라도 존재하는 클래스)의 객체는 생성할 수 없다
-	//Animal* a = new Animal(COLOR_GREEN, 10);
+	RenderWindow window(VideoMode(1000, 800), "Sangsok");
 
-	Animal* animal = new Rabbit(COLOR_RED, 3, 20);
-	animal->Roar();	// 깡총 깡총
-	delete animal;
+	RectangleShape sp1;
+	sp1.setPosition(400, 300);
+	sp1.setSize(Vector2f(50, 50));
+	sp1.setFillColor(Color::Blue);
+
+	Entity* player = new Entity(3, &sp1);
+
+	while (window.isOpen())
+	{
+		Event e;
+		while (window.pollEvent(e))
+		{
+			if (e.type == Event::Closed)
+				window.close();
+		}
+		window.clear();
+
+		window.draw(player->get_sprite());
+
+		window.display();
+	}
+	return 0;
 }
